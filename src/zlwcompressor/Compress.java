@@ -23,7 +23,7 @@ public class Compress {
 			// Fill it alphabet, digits, and most symbols.
 			dictionary.put(Character.toString((char)(x+48)), new Integer(x));
 		}
-		//addToDictionary(dictionary, " ");
+		
 		// Create the Reader object
 		try (InputStream in = new FileInputStream(INPUT_FILE);
 			Reader reader = new InputStreamReader(in);
@@ -36,8 +36,6 @@ public class Compress {
 					tmp += c;
 					if(isInDictionary(dictionary, tmp))
 						continue;
-					
-					// TODO: Output
 					writer.writeInt(addToDictionary(dictionary,tmp));
 					tmp = "" + c;
 				}
@@ -54,8 +52,8 @@ public class Compress {
 	}
 	
 	private static char getCharacter(Reader reader) throws IOException {
-		int r;
-		if ((r = reader.read()) != -1){
+		int r = reader.read();
+		if (r != -1 && r != 32){
 			// We grabbed a valid character, return it
 			return (char) r;
 		}
