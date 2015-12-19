@@ -32,12 +32,20 @@ public class Compress {
 			DataOutputStream writer = new DataOutputStream(new FileOutputStream(OUTPUT_FILE));) {
 				char c;
 				String tmp = "";
-				while((c = getCharacter(buffer)) != '\0'){
-					tmp += c;
-					if(isInDictionary(dictionary, tmp))
-						continue;
-					writer.writeInt(addToDictionary(dictionary,tmp));
-					tmp = "" + c;
+				while(true){
+					c = getCharacter(buffer);
+					if(c != '\0'){
+						tmp += c;
+						if(isInDictionary(dictionary, tmp)){
+							continue;
+						}
+						writer.writeInt(addToDictionary(dictionary,tmp));
+						tmp = "" + c;
+					}
+					else {
+						writer.writeInt(getDictionaryLocation(dictionary, tmp));
+						break;
+					}
 				}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,6 +78,9 @@ public class Compress {
 		if(dictionary.containsKey(target))
 			return true;
 		return false;
+	}
+	private static int getDictionaryLocation(HashMap<String,Integer> dictionary, String target){
+		return dictionary.get(target);
 	}
 
 }
